@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import moment from "moment";
 import "./css/styles.css";
+
+// https://momentjs.com/docs/
 const Calendar = () => {
   const [dateObject, setDateObject] = useState(moment());
-  console.log("OUTPUT: Calendar -> dateObject", dateObject.format("YYYY-MM"));
   const [allMonths] = useState(moment.months());
 
   const weekDaysShort = moment.weekdaysShort();
@@ -52,11 +53,15 @@ const Calendar = () => {
   });
   // tạo 2 array cha và con,
   // trường hợp array con đủ 7 phần tử thì nhét vô array con vào array cha + reset array con
+  // Render
+  const renderDaysInMonth = rows.map((d, idx) => {
+    return <tr key={idx}>{d}</tr>;
+  });
 
   const selectedMonth = (month) => () => {
     const monthNo = allMonths.indexOf(month); // get month number
-    let newObj = { ...dateObject };
-    newObj = moment(dateObject).set("month", monthNo); // change month value
+    //let newObj = { ...dateObject };
+    let newObj = moment(dateObject).set("month", monthNo).clone(); // change month value
     setDateObject(newObj);
   };
 
@@ -87,10 +92,7 @@ const Calendar = () => {
       return <tr key={idx}>{d}</tr>;
     });
   };
-
-  const renderDaysInMonth = rows.map((d, idx) => {
-    return <tr key={idx}>{d}</tr>;
-  });
+  // sua lai render thanh the div - render day inmonth, day in week,
 
   //handle function render
   const _handleClickMonth = () => {
@@ -99,18 +101,16 @@ const Calendar = () => {
   const _handleClickYear = () => {
     console.log("show list year");
   };
+  // https://momentjscom.readthedocs.io/en/latest/moment/04-displaying/10-days-in-month/
   const _handlePrevMonth = () => {
-    const prevMonth = dateObject.subtract(1, "month").format("MMMM");
-    const monthNo = allMonths.indexOf(prevMonth);
-    let newObj = { ...dateObject };
-    newObj = moment(dateObject).set("month", monthNo);
+    // const monthNo = allMonths.indexOf(
+    //   dateObject.subtract(1, "month").format("MMMM")
+    // );
+    let newObj = moment(dateObject).subtract(1, "month").clone();
     setDateObject(newObj);
   };
   const _handleNextMonth = () => {
-    const nextMonth = dateObject.add(1, "month").format("MMMM");
-    const monthNo = allMonths.indexOf(nextMonth);
-    let newObj = { ...dateObject };
-    newObj = moment(dateObject).set("month", monthNo);
+    let newObj = moment(dateObject).add(1, "month").clone();
     setDateObject(newObj);
   };
 
