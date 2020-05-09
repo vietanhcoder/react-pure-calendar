@@ -1,24 +1,27 @@
 import React, { useState } from "react";
 import moment from "moment";
 import "./css/styles.css";
-const Calendar3 = () => {
+const Calendar = () => {
   const [dateObject, setDateObject] = useState(moment());
+  console.log("OUTPUT: Calendar -> dateObject", dateObject.format("YYYY-MM"));
   const [allMonths] = useState(moment.months());
 
   const weekDaysShort = moment.weekdaysShort();
   const firstDayOfMonth = moment(dateObject).startOf("month").format("d"); // The number of days in week
+
   const getCurrentDay = Number(dateObject.format("D"));
   const getMonth = dateObject.format("MMM");
   const getYear = dateObject.format("Y");
   // empty days list before the first day of of month
+
   const emptyDays = [];
   for (let i = 0; i < firstDayOfMonth; i++) {
     const key = `empty-${i}`;
     emptyDays.push(<td key={key} className="calendar-day empty" />);
   }
-
   // days in month
   const daysInMonth = [];
+
   for (let d = 1; d <= dateObject.daysInMonth(); d++) {
     const currentDay = d === getCurrentDay ? "today" : "";
     daysInMonth.push(
@@ -27,6 +30,8 @@ const Calendar3 = () => {
       </td>
     );
   }
+  // moment("2012-02", "YYYY-MM")
+  // https://momentjscom.readthedocs.io/en/latest/moment/04-displaying/10-days-in-month/
 
   // Render calendar structure of week days
   const totalSlots = [...emptyDays, ...daysInMonth];
@@ -52,7 +57,6 @@ const Calendar3 = () => {
     const monthNo = allMonths.indexOf(month); // get month number
     let newObj = { ...dateObject };
     newObj = moment(dateObject).set("month", monthNo); // change month value
-    console.log("OUTPUT: slelectedMonth -> newObj", newObj);
     setDateObject(newObj);
   };
 
@@ -95,9 +99,24 @@ const Calendar3 = () => {
   const _handleClickYear = () => {
     console.log("show list year");
   };
+  const _handlePrevMonth = () => {
+    const prevMonth = dateObject.subtract(1, "month").format("MMMM");
+    const monthNo = allMonths.indexOf(prevMonth);
+    let newObj = { ...dateObject };
+    newObj = moment(dateObject).set("month", monthNo);
+    setDateObject(newObj);
+  };
+  const _handleNextMonth = () => {
+    const nextMonth = dateObject.add(1, "month").format("MMMM");
+    const monthNo = allMonths.indexOf(nextMonth);
+    let newObj = { ...dateObject };
+    newObj = moment(dateObject).set("month", monthNo);
+    setDateObject(newObj);
+  };
+
   // End of function Render
   return (
-    <div>
+    <div className="calendar-wrapper">
       <div className="tail-datetime-calendar">
         <div className="calendar-navi calendar-year">
           <span
@@ -119,8 +138,8 @@ const Calendar3 = () => {
         </div>
       </div>
       <div className="icon-nav-month-wrapper">
-        <i className="fa fa-arrow-left"></i>
-        <i className="fa fa-arrow-right"></i>
+        <i className="fa fa-arrow-left" onClick={_handlePrevMonth}></i>
+        <i className="fa fa-arrow-right" onClick={_handleNextMonth}></i>
       </div>
       <div className="calendar-date">
         <table className="calendar-month">
@@ -148,4 +167,4 @@ const Calendar3 = () => {
   );
 };
 
-export default Calendar3;
+export default Calendar;

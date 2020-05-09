@@ -1,3 +1,50 @@
 .calendar-day .today {
   background-color: #64a70d;
 }
+
+.App {
+  display: flex;
+  justify-content: center;
+  background: gray;
+  height: 100vh;
+}
+
+.calendar-wrapper {
+  max-width: 300px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  background: white;
+  max-height: 420px;
+}
+
+.icon-nav-month-wrapper {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+}
+
+.icon-nav-month-wrapper i {
+  width: 50%;
+  text-align: center;
+  font-size: 30px;
+  border: 1px solid gray;
+  padding: 5px;
+  cursor: pointer;
+  color: gray;
+  opacity: 0.7;
+}
+
+.icon-nav-month-wrapper i:hover {
+  opacity: 1;
+
+}
+
+
+.tail-datetime-calendar .calendar-year {
+  background-color: #f57225;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
