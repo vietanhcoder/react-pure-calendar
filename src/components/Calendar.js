@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import moment from "moment";
 import "./css/styles.css";
-
+import uuid from "react-uuid";
 // https://momentjs.com/docs/
 const Calendar = () => {
   const [dateObject, setDateObject] = useState(moment());
@@ -15,52 +15,34 @@ const Calendar = () => {
   const getYear = dateObject.format("Y");
   // empty days list before the first day of of month
 
-  const emptyDays = [];
-  for (let i = 0; i < firstDayOfMonth; i++) {
-    const key = `empty-${i}`;
-    emptyDays.push(<td key={key} className="calendar-day empty" />);
-  }
-  // days in month
-  const daysInMonth = [];
-
-  for (let d = 1; d <= dateObject.daysInMonth(); d++) {
-    const currentDay = d === getCurrentDay ? "today" : "";
-    daysInMonth.push(
-      <td key={d} className={`calendar-day ${currentDay}`}>
-        {d}
-      </td>
-    );
-  }
   // moment("2012-02", "YYYY-MM")
   // https://momentjscom.readthedocs.io/en/latest/moment/04-displaying/10-days-in-month/
 
   // Render calendar structure of week days
-  const totalSlots = [...emptyDays, ...daysInMonth];
-  let rows = []; // Array of hàng ngang
-  let cells = []; // array con
-  totalSlots.forEach((row, idx) => {
-    if (idx % 7 !== 0) {
-      cells.push(row); // if index not equal 7 that means not go to next week
-    } else {
-      rows.push(cells); // when reach next week we contain all td in last week to rows
-      cells = []; //empty container
-      cells.push(row); // in current loop we still push current row to new container
-    }
-    if (idx === totalSlots.length - 1) {
-      // when end loop we add remain date
-      rows.push(cells);
-    }
-  });
-  // tạo 2 array cha và con,
-  // trường hợp array con đủ 7 phần tử thì nhét vô array con vào array cha + reset array con
-  // Render
-  const renderDaysInMonth = rows.map((d, idx) => {
-    return <tr key={idx}>{d}</tr>;
-  });
 
+  const RenderAllDays = () => {
+    const allSlots = [];
+    for (let i = 0; i < firstDayOfMonth; i++) {
+      allSlots.push(<div key={uuid()} className="calendar-day empty"></div>);
+    }
+    for (let d = 1; d <= dateObject.daysInMonth(); d++) {
+      const currentDay = d === getCurrentDay ? "today" : "";
+      allSlots.push(
+        <div key={uuid()} className={`calendar-day ${currentDay}`}>
+          {d}
+        </div>
+      );
+    }
+    return allSlots.map((d, idx) => {
+      return (
+        <div key={idx} className="day-in-month">
+          {d}
+        </div>
+      );
+    });
+  };
   const selectedMonth = (month) => () => {
     const monthNo = allMonths.indexOf(month); // get month number
-    //let newObj = { ...dateObject };
     let newObj = moment(dateObject).set("month", monthNo).clone(); // change month value
     setDateObject(newObj);
   };
@@ -142,26 +124,17 @@ const Calendar = () => {
         <i className="fa fa-arrow-right" onClick={_handleNextMonth}></i>
       </div>
       <div className="calendar-date">
-        <table className="calendar-month">
+        {/* <table className="calendar-month">
           <thead>
             <tr>
               <th colSpan="4">Select a Month</th>
             </tr>
           </thead>
           <tbody>{renderMonthsList()}</tbody>
-        </table>
-        <table className="calendar-day">
-          <thead>
-            <tr>
-              {weekDaysShort.map((day) => (
-                <th key={day} className="week-day">
-                  {day}
-                </th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>{renderDaysInMonth}</tbody>
-        </table>
+        </table> */}
+        <div className="calendar-full-day">
+          <RenderAllDays />
+        </div>
       </div>
     </div>
   );

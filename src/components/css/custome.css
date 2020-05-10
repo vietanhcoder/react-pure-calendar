@@ -48,3 +48,13 @@
   justify-content: center;
   align-items: center;
 }
+
+.calendar-full-day {
+  display: flex;
+  flex-wrap: wrap;
+
+}
+
+.calendar-full-day .day-in-month {
+  width: calc(100%/7);
+}
